@@ -19,10 +19,6 @@ await app.register(fastifyPrintRoutes, {
 });
 
 // 2. In-memory "database" for the example
-const books = [
-  { id: 1, title: 'Dune', author: 'Herbert' },
-  { id: 2, title: 'Hyperion', author: 'Simmons' }
-]
 
 const toTagString = (reqObj) => {
     const loc = reqObj.location_id.toString().padStart(4, '0');
@@ -31,20 +27,7 @@ const toTagString = (reqObj) => {
     return `${loc}${cat}${cont}`;
 }
 
-// I'm not sure what this data should look like, it won't be a const like this but..
-const rfidData = [
-    { storage_id: 50, container: 'electronics shelf', location_id: 800, category_id: 80 },
-    { storage_id: 617, container: 'Jeep', location_id: 0, category_id: 0 },
-    { storage_id: 12, container: 'shoe shelf', location_id: 100, category_id: 50 },
-]
-
 await app.register(cors, { origin: true });
-
-// A simple GET route. Handlers are async functions that return
-//    the response body. Fastify serializes to JSON automatically.
-app.get('/api/inventory', async (request, reply) => {
-  return rfidData;  // becomes JSON, sent with 200 OK.
-})
 
 // a GET with a URL parameter and a response schema.
 app.get('/api/inventory/sync', {
@@ -70,7 +53,7 @@ app.get('/api/inventory/sync', {
         prisma.storage_containers.findMany(),
         prisma.inventory.findMany(),
         prisma.digit_count.findMany()
-    ])
+    ]);
 
     return {
         locations,
@@ -163,18 +146,3 @@ const start = async () => {
 }
 
 start();
-
-/**
- * 
-
-curl http://localhost:3000/books
-curl http://localhost:3000/books/1
-curl -X POST http://localhost:3000/books \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Neuromancer", "author": "Gibson"}'
-curl -X POST http://localhost:3000/books \
-  -H "Content-Type: application/json" \
-  -d '{"title": ""}'   # watch this one get rejected with a clear error
-
-  
- */
