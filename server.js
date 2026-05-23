@@ -1,7 +1,8 @@
-import Fastify, { fastify } from 'fastify';
+import Fastify from 'fastify';
 import { locationSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
+import fastifyPrintRoutes from 'fastify-print-routes';
 
 const prisma = new PrismaClient();
 
@@ -11,7 +12,12 @@ const app = Fastify({
   }
 });
 
-console.log(fastify.printRoutes());
+await app.register(fastifyPrintRoutes, {
+    useColors: true,     // Pretty colors for console output
+    compact: false,      // Show each HTTP method separately
+    querystring: false   // Hide query string params in the printed paths
+});
+
 // 2. In-memory "database" for the example
 const books = [
   { id: 1, title: 'Dune', author: 'Herbert' },
