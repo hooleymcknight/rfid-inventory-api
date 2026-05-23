@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model container_categories {
+  category_id Int     @id
+  category    String? @db.VarChar(45)
+}
+
+model digit_count {
+  database_name String @id @unique(map: "id_UNIQUE") @db.VarChar(45)
+  digit_count   Int?
+}
+
+model inventory {
+  item_id      Int     @id @unique(map: "item_id_UNIQUE") @default(autoincrement())
+  item         String? @db.Text
+  description  String? @db.Text
+  container_id Int
+}
+
+model locations {
+  location_id   Int     @id @unique(map: "location_id_UNIQUE") @default(autoincrement())
+  location_name String? @db.VarChar(45)
+}
+
+model storage_containers {
+  storage_id  Int     @id @unique(map: "storage_id_UNIQUE")
+  container   String? @db.VarChar(155)
+  location_id Int?
+  category_id Int?
+}

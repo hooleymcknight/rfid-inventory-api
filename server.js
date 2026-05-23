@@ -1,4 +1,9 @@
-import Fastify from 'fastify'
+import Fastify from 'fastify';
+import { locationSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
+import { PrismaClient } from '@prisma/client';
+import cors from '@fastify/cors'
+
+const prisma = new PrismaClient();
 
 const app = Fastify({
   logger: {
@@ -26,6 +31,8 @@ const rfidData = [
     { storage_id: 12, container: 'shoe shelf', location_id: 100, category_id: 50 },
 ]
 
+await app.register(cors, { origin: true });
+
 // A simple GET route. Handlers are async functions that return
 //    the response body. Fastify serializes to JSON automatically.
 app.get('/api/inventory', async (request, reply) => {
@@ -39,8 +46,11 @@ app.get('/api/inventory/sync', {
             200: {
                 type: 'object',
                 properties: {
-                    locations: { type: 'array', items: { /* ... */ } },
-                    // etc. // ====== fill this in!
+                    locations: { type: 'array', items:  locationSchema},
+                    categories: { type: 'array', items: categoriesSchema},
+                    containers: { type: 'array', items: containersSchema},
+                    items: { type: 'array', items: itemsSchema },
+                    digitCounts: { type: 'array', items: digitCountsSchema },
                 }
             }
         }
