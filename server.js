@@ -1,4 +1,4 @@
-import Fastify from 'fastify';
+import Fastify, { fastify } from 'fastify';
 import { locationSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
@@ -11,8 +11,7 @@ const app = Fastify({
   }
 });
 
-console.log(Fastify.printRoutes());
-
+console.log(fastify.printRoutes());
 // 2. In-memory "database" for the example
 const books = [
   { id: 1, title: 'Dune', author: 'Herbert' },
