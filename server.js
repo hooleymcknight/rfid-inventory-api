@@ -9,7 +9,9 @@ const app = Fastify({
   logger: {
     transport: { target: 'pino-pretty' } // human-readable logs in dev
   }
-})
+});
+
+console.log(Fastify.printRoutes());
 
 // 2. In-memory "database" for the example
 const books = [
