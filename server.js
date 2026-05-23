@@ -33,28 +33,19 @@ app.get('/api/inventory', async (request, reply) => {
 })
 
 // a GET with a URL parameter and a response schema.
-//    The schema tells Fastify what the response shape looks like,
-//    which makes serialization ~2x faster AND documents the API.
-// app.get('/api/inventory/sync', {
-//     schema: {
-//         response: {
-//             200: {
-//                 type: 'object',
-//                 // properties: {
-//                 //     storage_id: { type: 'integer' },
-//                 //     container: { type: 'string' },
-//                 //     location_id: { type: 'integer' },
-//                 //     category_id: { type: 'integer' },
-//                 // }
-//             }
-//         }
-//     }
-// }, async (request, reply) => {
-//     //
-// });
-
-// no schema needed here? 
-app.get('/api/inventory/sync', async (request, reply) => {
+app.get('/api/inventory/sync', {
+    schema: {
+        response: {
+            200: {
+                type: 'object',
+                properties: {
+                    locations: { type: 'array', items: { /* ... */ } },
+                    // etc. // ====== fill this in!
+                }
+            }
+        }
+    }
+}, async (request, reply) => {
     // Run them all in parallel since none depend on each other
     const [locations, categories, containers, items, digitCounts] = await Promise.all([
         prisma.locations.findMany(),
@@ -72,6 +63,26 @@ app.get('/api/inventory/sync', async (request, reply) => {
         digitCounts
     }
 });
+
+/* example of what the get will return, use this to build that schema up there
+{
+  "locations": [
+    { "location_id": 100, "location_name": "garage" },
+    { "location_id": 200, "location_name": "front room" },
+    ...
+  ],
+  "categories": [
+    { "category_id": 10, "category": "lid bins" },
+    ...
+  ],
+  "containers": [
+    { "storage_id": 0, "container": "yellow bin O", "location_id": 100, "category_id": 10 },
+    ...
+  ],
+  "items": [...],
+  "digitCounts": [...]
+}
+  */
 
 // A POST with body validation. If the request body doesn't match
 //    the schema, Fastify rejects it with a 400 before your handler runs.
