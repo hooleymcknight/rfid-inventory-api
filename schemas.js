@@ -30,7 +30,7 @@ export const itemsSchema = {
         item_id: { type: 'integer' },
         item: { type: 'string' },
         description: { type: 'string' },
-        container_id: { type: 'integer' },
+        storage_id: { type: 'integer' },
     }
 };
 
