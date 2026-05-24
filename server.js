@@ -92,11 +92,11 @@ app.post('/api/inventory', {
     schema: {
         body: {
             type: 'object',
-            required: ['item', 'container_id'],
+            required: ['item', 'storage_id'],
             properties: {
                 item: { type: 'string', minLength: 1 },
                 description: { type: 'string' },
-                container_id: { type: 'string', pattern: '^[0-9]{10}$' },
+                storage_id: { type: 'string', pattern: '^[0-9]{10}$' },
             }
         }
     }
@@ -105,7 +105,7 @@ app.post('/api/inventory', {
         data: {
             item: request.body.item,
             description: request.body.description,
-            container_id: request.body.container_id,
+            storage_id: request.body.storage_id,
         }
     });
     reply.code(201);
