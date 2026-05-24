@@ -25,7 +25,7 @@ model inventory {
 }
 
 model locations {
-  location_id   Int     @id @unique(map: "location_id_UNIQUE") @default(autoincrement())
+  location_id   Int     @id @unique(map: "location_id_UNIQUE")
   location_name String? @db.VarChar(45)
 }
 
