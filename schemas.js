@@ -37,6 +37,7 @@ export const itemsSchema = {
 export const digitCountsSchema = {
     type: 'object',
     properties: {
+        sort_order: { type: 'integer' },
         database_name: { type: 'string' },
         digit_count: { type: 'integer' },
     }
