@@ -144,4 +144,5 @@ vite.config.ts.timestamp-*
 
 # other filessss
 package-lock.json
-prisma/schema.prisma # bc syncing this just causes issues. I can generate it just fine.
+prisma/schema.prisma 
+# bc syncing this just causes issues. I can generate it just fine.
