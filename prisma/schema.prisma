@@ -18,10 +18,10 @@ model digit_count {
 }
 
 model inventory {
-  item_id      Int     @id @unique(map: "item_id_UNIQUE") @default(autoincrement())
-  item         String? @db.Text
-  description  String? @db.Text
-  container_id Int
+  item_id     Int     @id @unique(map: "item_id_UNIQUE") @default(autoincrement())
+  item        String? @db.Text
+  description String? @db.Text
+  storage_id  Int
 }
 
 model locations {
