@@ -88,7 +88,7 @@ app.get('/api/inventory/sync', {
 //    the schema, Fastify rejects it with a 400 before your handler runs.
 //    No manual validation code. This is the killer feature.
 // --- this is where we add new inventory items.
-app.post('/api/inventory', {
+app.post('/api/inventory/items', {
     schema: {
         body: {
             type: 'object',
@@ -96,20 +96,33 @@ app.post('/api/inventory', {
             properties: {
                 item: { type: 'string', minLength: 1 },
                 description: { type: 'string' },
-                storage_id: { type: 'string', pattern: '^[0-9]{10}$' },
+                storage_id: { type: 'integer', minimum: 0 },
+            }
+        },
+        response: {
+            201: {
+                type: 'object',
+                properties: {
+                    item_id: { type: 'integer' },
+                    item: { type: 'string' },
+                    description: { type: ['string', 'null'] },
+                    storage_id: { type: 'integer' }
+                }
             }
         }
     }
 }, async (request, reply) => {
-    const newItem = await prisma.inventory.create({
-        data: {
-            item: request.body.item,
-            description: request.body.description,
-            storage_id: request.body.storage_id,
+    try {
+        const newItem = await prisma.inventory.create({ data: request.body });
+        reply.code(201);
+        return newItem;
+    } catch (err) {
+        if (err.code === 'P2025' || err.code === 'P2003') {
+            reply.code(400);
+            return { error: 'storage_id does not reference an existing container' };
         }
-    });
-    reply.code(201);
-    return newItem;
+        throw err;
+    }
 });
 
 /**
