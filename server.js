@@ -131,7 +131,7 @@ app.post('/api/inventory/updates', {
             type: 'object',
             required: ['item_id'],
             properties: {
-                item_id: { type: 'integer', minLength: 1 },
+                item_id: { type: 'integer' },
                 item: { type: 'string', minLength: 1 },
                 description: { type: 'string' },
                 storage_id: { type: 'integer' },
