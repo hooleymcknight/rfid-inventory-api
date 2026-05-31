@@ -125,6 +125,48 @@ app.post('/api/inventory/items', {
     }
 });
 
+app.post('/api/inventory/updates', {
+    schema: {
+        body: {
+            type: 'object',
+            required: ['item_id'],
+            properties: {
+                item_id: { type: 'integer', minLength: 1 },
+                item: { type: 'string', minLength: 1 },
+                description: { type: 'string' },
+                storage_id: { type: 'integer' },
+            }
+        },
+        response: {
+            201: {
+                type: 'object',
+                properties: {
+                    item_id: { type: 'integer' },
+                    item: { type: 'string' },
+                    description: { type: ['string', 'null'] },
+                    storage_id: { type: 'integer' }
+                }
+            }
+        }
+    }
+}, async (request, reply) => {
+    try {
+        let {itemId, ...updateData} = request.body;
+        const updatedItem = await prisma.inventory.update(
+            { data: request.body },
+            { where: { item_id: itemId } }
+        );
+        reply.code(201);
+        return updatedItem;
+    } catch (err) {
+        if (err.code === 'P2025' || err.code === 'P2003') {
+            reply.code(400);
+            return { error: 'storage_id does not reference an existing container' };
+        }
+        throw err;
+    }
+});
+
 /**
  * commented out for now, but if we are adding containers.
  * includes framing for how we'll grab the next available ID.
