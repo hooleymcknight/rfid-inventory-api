@@ -125,7 +125,7 @@ app.post('/api/inventory/items', {
     }
 });
 
-app.post('/api/inventory/updates', {
+app.put('/api/inventory/updates', {
     schema: {
         body: {
             type: 'object',
@@ -159,6 +159,48 @@ app.post('/api/inventory/updates', {
         });
         reply.code(201);
         return updatedItem;
+    } catch (err) {
+        if (err.code === 'P2025' || err.code === 'P2003') {
+            reply.code(400);
+            return { error: 'storage_id does not reference an existing container' };
+        }
+        throw err;
+    }
+});
+
+// DELETE /api/inventory/items/:id
+app.delete('/api/inventory/items/:id', {
+    schema: {
+        body: {
+            type: 'object',
+            required: ['item_id'],
+            properties: {
+                item_id: { type: 'integer' },
+            }
+        },
+        response: {
+            201: {
+                type: 'object',
+                properties: {
+                    item_id: { type: 'integer' },
+                    item: { type: 'string' },
+                    description: { type: ['string', 'null'] },
+                    storage_id: { type: 'integer' }
+                }
+            }
+        }
+    }
+}, async (request, reply) => {
+    try {
+        console.log(request.body);
+        let {item_id, ...updateData} = request.body;
+        // const updatedItem = await prisma.inventory.delete({
+        //     where: { 'item_id': item_id }
+        // });
+        // reply.code(201);
+        // return updatedItem;
+        console.log(item_id)
+        return 'fake success';
     } catch (err) {
         if (err.code === 'P2025' || err.code === 'P2003') {
             reply.code(400);
