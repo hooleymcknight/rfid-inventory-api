@@ -27,7 +27,10 @@ const toTagString = (reqObj) => {
     return `${loc}${cat}${cont}`;
 }
 
-await app.register(cors, { origin: true });
+await app.register(cors, {
+    origin: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+});
 
 // a GET with a URL parameter and a response schema.
 app.get('/api/inventory/sync', {
