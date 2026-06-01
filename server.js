@@ -191,6 +191,7 @@ app.delete('/api/inventory/items/:id', {
         }
     }
 }, async (request, reply) => {
+    const { id } = request.params;
     try {
         console.log(request.body);
         let {item_id, ...updateData} = request.body;
@@ -199,7 +200,7 @@ app.delete('/api/inventory/items/:id', {
         // });
         // reply.code(201);
         // return updatedItem;
-        console.log(item_id)
+        console.log('delete:', item_id, 'same as ', id)
         return 'fake success';
     } catch (err) {
         if (err.code === 'P2025' || err.code === 'P2003') {
