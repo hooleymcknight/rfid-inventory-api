@@ -198,13 +198,13 @@ app.delete('/api/inventory/items/:id', {
     try {
         console.log(request.body);
         let {item_id, ...updateData} = request.body;
-        // const updatedItem = await prisma.inventory.delete({
-        //     where: { 'item_id': item_id }
-        // });
-        // reply.code(201);
-        // return updatedItem;
-        console.log('delete:', item_id, 'same as ', id)
-        return 'fake success';
+        const updatedItem = await prisma.inventory.delete({
+            where: { 'item_id': Number(id) }
+        });
+        reply.code(201);
+        return updatedItem;
+        // console.log('delete:', item_id, 'same as ', id)
+        // return 'fake success';
     } catch (err) {
         if (err.code === 'P2025' || err.code === 'P2003') {
             reply.code(400);
