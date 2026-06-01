@@ -32,6 +32,13 @@ await app.register(cors, {
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 });
 
+app.addHook('onRequest', async (request, reply) => {
+    if (request.method === 'OPTIONS') return; // freedom for CORS preflight
+    if (request.headers['x-api-key'] !== process.env.API_KEY) {
+        return reply.code(401).send({ error: 'Unauthorized' });
+    }
+});
+
 // a GET with a URL parameter and a response schema.
 app.get('/api/inventory/sync', {
     schema: {
@@ -203,8 +210,6 @@ app.delete('/api/inventory/items/:id', {
         });
         reply.code(201);
         return updatedItem;
-        // console.log('delete:', item_id, 'same as ', id)
-        // return 'fake success';
     } catch (err) {
         if (err.code === 'P2025' || err.code === 'P2003') {
             reply.code(400);
