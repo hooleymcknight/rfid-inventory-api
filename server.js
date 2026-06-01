@@ -152,10 +152,10 @@ app.post('/api/inventory/updates', {
 }, async (request, reply) => {
     try {
         let {itemId, ...updateData} = request.body;
-        const updatedItem = await prisma.inventory.update(
-            { data: request.body },
-            { where: { item_id: itemId } }
-        );
+        const updatedItem = await prisma.inventory.update({
+            data: request.body,
+            where: { item_id: itemId }
+        });
         reply.code(201);
         return updatedItem;
     } catch (err) {
