@@ -7,7 +7,8 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 3001,
-        DB_NAME: process.env.PERSONAL_DB_NAME,
+        DATABASE_URL: process.env.PERSONAL_DATABASE_URL,
+        API_KEY: process.env.API_KEY,
       },
     },
     {
@@ -17,7 +18,8 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 3002,
-        DB_NAME: process.env.SHARED_DB_NAME,
+        DATABASE_URL: process.env.SHARED_DATABASE_URL,
+        API_KEY: process.env.API_KEY,
       },
     },
   ],
