@@ -1,10 +1,19 @@
-export const locationSchema = {
+export const locationTypesSchema = {
     type: 'object',
     properties: {
-        location_id: { type: 'integer' },
-        location_name: { type: 'string' },
+        id: { type: 'integer' },
+        name: { type: 'string' },
     }
 };
+
+export const locationsSchema = {
+    type: 'object',
+    properties: {
+        id: { type: 'integer' },
+        group_id: { type: 'integer' },
+        location_type_id: { type: 'integer' },
+    }
+}
 
 export const categoriesSchema = {
     type: 'object',

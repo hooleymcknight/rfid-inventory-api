@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import { locationSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
+import { locationTypesSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 import fastifyPrintRoutes from 'fastify-print-routes';
@@ -46,7 +46,7 @@ app.get('/api/inventory/sync', {
             200: {
                 type: 'object',
                 properties: {
-                    locations: { type: 'array', items:  locationSchema},
+                    locationTypes: { type: 'array', items:  locationTypesSchema},
                     categories: { type: 'array', items: categoriesSchema},
                     containers: { type: 'array', items: containersSchema},
                     items: { type: 'array', items: itemsSchema },
