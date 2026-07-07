@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import { locationTypesSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema } from './schemas.js';
+import { locationTypesSchema, categoriesSchema, containersSchema, itemsSchema, digitCountsSchema, locationsSchema } from './schemas.js';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 import fastifyPrintRoutes from 'fastify-print-routes';
@@ -47,6 +47,7 @@ app.get('/api/inventory/sync', {
                 type: 'object',
                 properties: {
                     locationTypes: { type: 'array', items:  locationTypesSchema},
+                    locations: { type: 'array', items: locationsSchema },
                     categories: { type: 'array', items: categoriesSchema},
                     containers: { type: 'array', items: containersSchema},
                     items: { type: 'array', items: itemsSchema },
@@ -57,7 +58,8 @@ app.get('/api/inventory/sync', {
     }
 }, async (request, reply) => {
     // Run them all in parallel since none depend on each other
-    const [locations, categories, containers, items, digitCounts] = await Promise.all([
+    const [locationTypes, locations, categories, containers, items, digitCounts] = await Promise.all([
+        prisma.locationTypes.findMany(),
         prisma.locations.findMany(),
         prisma.container_categories.findMany(),
         prisma.storage_containers.findMany(),
@@ -66,6 +68,7 @@ app.get('/api/inventory/sync', {
     ]);
 
     return {
+        locationTypes,
         locations,
         categories,
         containers,
@@ -76,11 +79,16 @@ app.get('/api/inventory/sync', {
 
 /* example of what the get will return, use this to build that schema up there
 {
-  "locations": [
-    { "location_id": 100, "location_name": "garage" },
-    { "location_id": 200, "location_name": "front room" },
+  "locationTypes": [
+    { "id": 100, "name": "garage" },
+    { "id": 200, "name": "front room" },
     ...
   ],
+  "locations": [
+    { "id": xxx, "group_id": xxx, "location_type_id": xxx },
+    // should replace each xxx with a more structured example once I know what these numbers could look like.
+    ...
+  ]
   "categories": [
     { "category_id": 10, "category": "lid bins" },
     ...
