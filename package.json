@@ -8,8 +8,8 @@
     "start": "node server.js",
     "pm2start": "set -a && . ./.env.deploy && set +a && pm2 start ecosystem.config.cjs",
     "loadUrls": "set -a && . ./.env.deploy && set +a",
-    "db pull": "set -a && . ./.env.deploy && set +a && DATABASE_URL='$PERSONAL_DATABASE_URL' npx prisma db pull",
-    "db pull shared": "set -a && . ./.env.deploy && set +a && DATABASE_URL='$SHARED_DATABASE_URL' npx prisma db pull"
+    "db pull": "set -a && . ./.env.deploy && set +a && DATABASE_URL=\"$PERSONAL_DATABASE_URL\" npx prisma db pull",
+    "db pull shared": "set -a && . ./.env.deploy && set +a && DATABASE_URL=\"$SHARED_DATABASE_URL\" npx prisma db pull"
   },
   "keywords": [],
   "author": "",
