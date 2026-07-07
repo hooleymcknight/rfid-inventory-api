@@ -59,7 +59,7 @@ app.get('/api/inventory/sync', {
 }, async (request, reply) => {
     // Run them all in parallel since none depend on each other
     const [locationTypes, locations, categories, containers, items, digitCounts] = await Promise.all([
-        prisma.locationTypes.findMany(),
+        prisma.location_types.findMany(),
         prisma.locations.findMany(),
         prisma.container_categories.findMany(),
         prisma.storage_containers.findMany(),
